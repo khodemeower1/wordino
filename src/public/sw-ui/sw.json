@@ -1,0 +1,1975 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Wordino API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/authors/changePassword": {
+      "post": {
+        "tags": [
+          "Author"
+        ],
+        "summary": "Change the password for a user",
+        "operationId": "79a8401d1548220f77822a72a9938535",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "oldPassword": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string"
+                  },
+                  "confirmPassword": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "password changed successfully"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "old password is not correct or new password and confirm password are not the same"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/authors/newAuthor": {
+      "post": {
+        "tags": [
+          "authentication",
+          "Author"
+        ],
+        "summary": "Register new Author",
+        "description": "This endpoint registers a new Author if the username is not already in use.",
+        "operationId": "b4cc614bc8f5d4079c7b88c0388961e4",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "access_level": {
+                    "description": "Optional access level for the new Author. default: 2",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "new user inserted to the database"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict !",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 409
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "user already exist in database!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/authors/login": {
+      "post": {
+        "tags": [
+          "authentication",
+          "Author"
+        ],
+        "summary": "Author Login",
+        "description": "This endpoint authenticates the user and returns a JWT token.",
+        "operationId": "185d2f5d4c28aeb349fdfb9d12d4fe99",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "result": {
+                      "properties": {
+                        "jwt-token": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "invalid credentials"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/authors/list": {
+      "get": {
+        "tags": [
+          "Author"
+        ],
+        "summary": "Get list of Authors",
+        "description": "This endpoint returns a list of all Authors in the database.",
+        "operationId": "e010be3fc3b8d978ef5dfb63d720c71a",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Here is the list of Authors"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "description": "The Author's ID.",
+                            "type": "integer"
+                          },
+                          "username": {
+                            "description": "The Author's username.",
+                            "type": "string"
+                          },
+                          "access_level": {
+                            "description": "The Author's access level.",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/authors/info/{id}": {
+      "get": {
+        "tags": [
+          "Author"
+        ],
+        "summary": "Get Author Info",
+        "description": "Get information about an author by their ID",
+        "operationId": "199b0b2a321de7c8446fbde074b3a562",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the author to retrieve",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "user info"
+                    },
+                    "result": {
+                      "properties": {
+                        "username": {
+                          "type": "string",
+                          "example": "johndoe"
+                        },
+                        "total_word_count": {
+                          "type": "integer",
+                          "example": 100
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "user not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/authors/changeAccessLevel": {
+      "post": {
+        "tags": [
+          "Author"
+        ],
+        "summary": "Change access level of an author",
+        "description": "This endpoint allows an authorized user with access level 4 to change the access level of an author.",
+        "operationId": "f6e679240d1a918909a16b2a99498382",
+        "requestBody": {
+          "description": "User ID and new access level",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "required": [
+                  "user_id",
+                  "access_level"
+                ],
+                "properties": {
+                  "user_id": {
+                    "description": "ID of the user to change access level for",
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "access_level": {
+                    "description": "New access level for the user",
+                    "type": "integer",
+                    "example": 3
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access level changed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "User access level changed to: 3"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Author not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Author not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Access level does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 409
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Access level does not exist!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/authors/removeUser": {
+      "post": {
+        "tags": [
+          "Author"
+        ],
+        "summary": "Remove a user",
+        "description": "This endpoint removes a user from the database based on their ID.",
+        "operationId": "07d5a7a38c9ae476e87444c917189bdc",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "required": [
+                  "user_id"
+                ],
+                "properties": {
+                  "user_id": {
+                    "description": "The ID of the user to remove",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "description": "Indicates whether the operation was successful",
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "description": "HTTP status code",
+                      "type": "integer"
+                    },
+                    "description": {
+                      "description": "A description of the response",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "description": "Indicates whether the operation was successful",
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "description": "HTTP status code",
+                      "type": "integer"
+                    },
+                    "description": {
+                      "description": "A description of the response",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/groups/newGroup": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Create a new group",
+        "operationId": "c9a38ab35bf9ec777135ad50e214256a",
+        "requestBody": {
+          "description": "Request body",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "description": "Name of the group",
+                    "type": "string",
+                    "example": "My Group"
+                  },
+                  "description": {
+                    "description": "Description of the group",
+                    "type": "string",
+                    "example": "This is my group"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New group inserted to database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "New group inserted to database"
+                    },
+                    "result": {
+                      "properties": {
+                        "group_name": {
+                          "type": "string",
+                          "example": "My Group"
+                        },
+                        "group_id": {
+                          "type": "integer",
+                          "example": 1
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/groups/removeGroup/{id}": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Remove a group",
+        "operationId": "aa650044da7bce9671b048571ee2a469",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the group to remove",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group removed from database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Group removed from database"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Group not found in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Group not found in database"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/groups/list": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get a list of all groups",
+        "operationId": "af0075f08ef1bc4ab01f37093e887beb",
+        "responses": {
+          "200": {
+            "description": "List of all groups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Groups list"
+                    },
+                    "result": {
+                      "properties": {
+                        "groups": {
+                          "type": "array",
+                          "items": {
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "group_name": {
+                                "type": "string",
+                                "example": "My Group"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "This is my group"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "group not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/groups/info/{id}": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get group information",
+        "operationId": "515f75d49ad553a2729b393dd69d33b4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "group info"
+                    },
+                    "result": {
+                      "properties": {
+                        "group": {
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "group_name": {
+                              "type": "string",
+                              "example": "My Group"
+                            },
+                            "description": {
+                              "type": "string",
+                              "example": "This is my group"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "total_wordlists": {
+                          "type": "integer",
+                          "example": 3
+                        },
+                        "total_words": {
+                          "type": "integer",
+                          "example": 100
+                        },
+                        "wordlists": {
+                          "type": "array",
+                          "items": {
+                            "properties": {
+                              "wordlist_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "wordlist_name": {
+                                "type": "string",
+                                "example": "My Wordlist 1"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/groups/getWords/{id}": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get words for a group",
+        "description": "Retrieve a list of distinct words associated with a group and order them by points.",
+        "operationId": "76bdc8ee95bfa3688119cf487d47a958",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the group to retrieve words for.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/words/delete": {
+      "post": {
+        "tags": [
+          "Words"
+        ],
+        "summary": "Delete multiple words",
+        "description": "Allows an authorized user with access level 3 to delete multiple words",
+        "operationId": "47efdc498bd9bfa18704f4e321ff503f",
+        "requestBody": {
+          "description": "Array of word IDs to be deleted",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Words deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Words deleted successfully"
+                    },
+                    "result": {
+                      "properties": {
+                        "word_id_not_int": {
+                          "description": "the word id is not an integer",
+                          "type": "integer"
+                        },
+                        "word_id_not_exist": {
+                          "description": "The word id does not exist",
+                          "type": "integer"
+                        },
+                        "word_id_deleted_successfull": {
+                          "description": "The word id was deleted successfully",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body or JSON format"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/words/newWord/{wordlist_id}": {
+      "post": {
+        "tags": [
+          "Words"
+        ],
+        "summary": "Add new words to a wordlist",
+        "operationId": "89ebbffd494cb00cf41e74c7db8f077f",
+        "parameters": [
+          {
+            "name": "wordlist_id",
+            "in": "path",
+            "description": "ID of the wordlist",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the words to be added",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "words"
+                ],
+                "properties": {
+                  "words": {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "word"
+                      ],
+                      "properties": {
+                        "word": {
+                          "description": "The word to be added",
+                          "type": "string"
+                        },
+                        "vuln": {
+                          "description": "Whether the word is considered vulnerable or not",
+                          "type": "boolean"
+                        },
+                        "reference": {
+                          "description": "Optional reference or description of the word",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Words added to wordlist successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "words added to wordlist"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/newWordlist": {
+      "post": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Create a new wordlist",
+        "operationId": "2a6c31076b1c9daba6abd8cf7b6dddba",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "my_wordlist"
+                  },
+                  "group_id": {
+                    "type": "integer",
+                    "example": "13"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New wordlist successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": "200"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "new wordlist inserted to database!"
+                    },
+                    "result": {
+                      "properties": {
+                        "wordlist_name": {
+                          "type": "string",
+                          "example": "my_wordlist"
+                        },
+                        "wordlist_id": {
+                          "type": "integer",
+                          "example": 1
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Group not found in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": "404"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Group not found in database"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Wordlist already exists in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": "409"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Wordlist already exists in database"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/getWordlist/{id}": {
+      "get": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Get words of a specific wordlist",
+        "description": "Get a list of words of a specific wordlist in descending order by their points.",
+        "operationId": "getWordlist",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the wordlist to retrieve",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "wordlist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "wordlist not found in database!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/info/{id}": {
+      "get": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Get information about a wordlist",
+        "description": "Retrieve information about a wordlist, including the total number of words, the authors who have contributed to the wordlist and the groups it belongs to.",
+        "operationId": "getWordlistInfo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the wordlist to retrieve information about",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "here is your information :D!"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "total_words": {
+                            "description": "The total number of words in the wordlist",
+                            "type": "integer"
+                          },
+                          "wordlist_name": {
+                            "description": "The name of the wordlist",
+                            "type": "string"
+                          },
+                          "authors": {
+                            "description": "An array of authors who have contributed to the wordlist",
+                            "type": "array",
+                            "items": {
+                              "properties": {
+                                "username": {
+                                  "description": "The username of the author",
+                                  "type": "string"
+                                },
+                                "word_count": {
+                                  "description": "The number of words the author has contributed to the wordlist",
+                                  "type": "integer"
+                                }
+                              },
+                              "type": "object"
+                            }
+                          },
+                          "groups": {
+                            "description": "An array of groups that the wordlist belongs to",
+                            "type": "array",
+                            "items": {
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of the group",
+                                  "type": "integer"
+                                },
+                                "group_name": {
+                                  "description": "The name of the group",
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "description": "The description of the group",
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "wordlist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "wordlist not found in database!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/addWordlistToGroup": {
+      "post": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Add a wordlist to a group",
+        "description": "Adds a wordlist to a group in the database",
+        "operationId": "addWordlistToGroup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "wordlist_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "group_id": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "something not found!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "something not found!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 409
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "wordlist already added to group!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "done",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "wordlist added!"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "wordlist_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "group_id": {
+                            "type": "integer",
+                            "example": 1
+                          }
+                        },
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/removeWordlistFromGroup": {
+      "post": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Removes a wordlist from a group",
+        "operationId": "6e3d6206fc46663d55bfc0807b409e3f",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "wordlist_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "group_id": {
+                    "type": "integer",
+                    "example": 2
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wordlist successfully removed from the group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Wordlist successfully removed from the group"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "wordlist_id": {
+                            "description": "ID of the removed wordlist",
+                            "type": "integer"
+                          },
+                          "group_id": {
+                            "description": "ID of the group from which the wordlist was removed",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/list": {
+      "get": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Get a list of all wordlists",
+        "operationId": "4e81b0c2b82a3abb7410db06b6cebdf9",
+        "responses": {
+          "200": {
+            "description": "A list of all wordlists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "A list of all wordlists"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "description": "The ID of the wordlist",
+                            "type": "integer"
+                          },
+                          "wordlist_name": {
+                            "description": "The name of the wordlist",
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Delete a wordlist by ID",
+        "operationId": "0fbf47f7fb723adb7188ce22fc4d379e",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the wordlist to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wordlist deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Wordlist deleted"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Wordlist not found in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Wordlist not found in database"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/rename": {
+      "post": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Rename a wordlist",
+        "operationId": "66ac060bbab9b6494f8f6d4222115a87",
+        "requestBody": {
+          "description": "Provide the ID and new name for the wordlist.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "wordlist_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "New name"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wordlist renamed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Wordlist renamed"
+                    },
+                    "result": {
+                      "properties": {
+                        "wordlist_id": {
+                          "description": "The ID of the renamed wordlist",
+                          "type": "integer"
+                        },
+                        "name": {
+                          "description": "The new name of the wordlist",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Wordlist not found in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Wordlist not found in database!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/wordlists/getWordlistFile/{id}": {
+      "get": {
+        "tags": [
+          "Wordlists"
+        ],
+        "summary": "Get words file of a specific wordlist",
+        "description": "Get a list of words of a specific wordlist in descending order by their points.",
+        "operationId": "getWordlistFile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the wordlist to retrieve",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "wordlist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "is_ok": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "wordlist not found in database!"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "bearerFormat": "JWT",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
