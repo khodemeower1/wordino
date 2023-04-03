@@ -9,5 +9,5 @@
 <br>
 
 <h3>🔰 TODO List</h3>
-- [ ]  Dockerizing Project
-- [ ]  Making CLI Tool
+[ ]  Dockerizing Project <br>
+[ ]  Making CLI Tool
