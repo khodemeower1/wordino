@@ -1,7 +1,7 @@
 <?php
 
-require '../vendor/autoload.php';
-require_once '../system/boot.php';
+require __DIR__'/../vendor/autoload.php';
+require_once __DIR__'/../system/boot.php';
 
 
 require_once HOME.'app/Routes.php';
